@@ -1,12 +1,40 @@
 version: '3.1'
 
 services:
-  pdc-db:
+  
+  db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_PASSWORD: pdctest
       POSTGRES_USER: pdc
       POSTGRES_DB: pdcDB
     ports:
       - 5432:5432
+  
+  pdc-article-service:
+    image: cwiegleb/pdc-article-service
+    ports: 
+      - 9001:9001
+    links:
+      - db:postgresContainer
+  
+  pdc-cashbox-service:
+    image: cwiegleb/pdc-cashbox-service
+    ports: 
+      - 9002:9002
+    links:
+      - db:postgresContainer
+
+  pdc-dealer-service:
+    image: cwiegleb/pdc-dealer-service
+    ports: 
+      - 9003:9003
+    links:
+      - db:postgresContainer
+
+  pdc-order-service:
+    image: cwiegleb/pdc-order-service
+    ports: 
+      - 9004:9004
+    links:
+      - db:postgresContainer

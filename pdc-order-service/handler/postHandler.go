@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,20 +58,25 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(order.OrderLines); i++ {
 		var article model.Article
 
-		if db.Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).First(&article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("article already sold")
-			return
+		if order.OrderLines[i].ArticleID != 0 {
+
+			if db.Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).First(&article).Error != nil {
+				tx.Rollback()
+				w.WriteHeader(http.StatusBadRequest)
+				log.Print("article already sold")
+				return
+			}
+
+			var articleUpdate model.Article
+			if tx.Model(&articleUpdate).Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).Update("available", 0).Error != nil {
+				tx.Rollback()
+				w.WriteHeader(http.StatusBadRequest)
+				log.Print("failed to update article")
+				return
+			}
 		}
 
-		var articleUpdate model.Article
-		if tx.Model(&articleUpdate).Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).Update("available", 0).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("failed to update article")
-			return
-		}
+		order.OrderLines[i].OrderID = order.ID
 		tx.NewRecord(order.OrderLines[i])
 	}
 

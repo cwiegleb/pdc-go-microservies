@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/cwiegleb/pdc-services/pdc-order-service/handler"
+	"github.com/gorilla/mux"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func main() {
@@ -15,5 +15,5 @@ func main() {
 	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.GetHandler).Methods("GET")
 	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.DeleteHandler).Methods("DELETE")
 	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.PutHandler).Methods("PUT")
-	http.ListenAndServe(":8083", r)
+	http.ListenAndServe(":9004", r)
 }

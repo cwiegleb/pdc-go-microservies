@@ -13,16 +13,10 @@ type configFile struct {
 	Server Config
 }
 
-//const defaultConfig = `
-//    [server]
-//    dbConnection = host=127.0.0.1 user=pdc dbname=pdcDB sslmode=disable password=pdctest
-//    dbDriver = postgres
-//`
-
 const defaultConfig = `
     [server]
-    dbConnection = pdc.db
-    dbDriver = sqlite3
+    dbConnection = host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+    dbDriver = postgres
 `
 
 func LoadConfiguration(cfgFile string) Config {
