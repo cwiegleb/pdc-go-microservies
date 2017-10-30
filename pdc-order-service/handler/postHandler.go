@@ -28,7 +28,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if json.Unmarshal(bodyBytes, order) != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
-		log.Print("Cannot unmarshal order", err)
+		log.Print("Cannot unmarshal order ", json.Unmarshal(bodyBytes, order))
 		return
 	}
 
@@ -60,7 +60,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 		if order.OrderLines[i].ArticleID != 0 {
 
-			if db.Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).First(&article).Error != nil {
+			if db.Where("id = ? AND available = true", order.OrderLines[i].ArticleID).First(&article).Error != nil {
 				tx.Rollback()
 				w.WriteHeader(http.StatusBadRequest)
 				log.Print("article already sold")
@@ -68,7 +68,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			var articleUpdate model.Article
-			if tx.Model(&articleUpdate).Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).Update("available", 0).Error != nil {
+			if order.OrderLines[i].ArticleID != 9999 && tx.Model(&articleUpdate).Where("id = ? AND available = true", order.OrderLines[i].ArticleID).Update("available", false).Error != nil {
 				tx.Rollback()
 				w.WriteHeader(http.StatusBadRequest)
 				log.Print("failed to update article")

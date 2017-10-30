@@ -7,6 +7,7 @@ import (
 // Dealer Model
 type Dealer struct {
 	gorm.Model
-	Text     string
-	Articles []Article
+	Text       string
+	ExternalId string
+	Articles   []Article
 }

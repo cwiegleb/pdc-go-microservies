@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 func GetsHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +24,7 @@ func GetsHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var articlesGet []model.Article
-	if db.Where("dealer_id = ? AND available = 1", vars["id"]).Find(&articlesGet).Error != nil {
+	if db.Where("dealer_id = ? AND available = true", vars["id"]).Find(&articlesGet).Error != nil {
 		w.WriteHeader(http.StatusNotFound)
 		log.Printf("Entries %s not found", vars["id"])
 		return

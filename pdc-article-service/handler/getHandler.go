@@ -24,7 +24,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var articleGet model.Article
-	if db.Where("ID = ? AND dealer_id = ? AND available = 1", vars["article-id"], vars["id"]).First(&articleGet).Error != nil {
+	if db.Where("ID = ? AND dealer_id = ? AND available = true", vars["article-id"], vars["id"]).First(&articleGet).Error != nil {
 		w.WriteHeader(http.StatusNotFound)
 		log.Printf("Entry %s not found", vars["id"])
 		return
