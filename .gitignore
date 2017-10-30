@@ -1,1 +1,11 @@
 .DS_Store
+
+pdc-article-service/pdc-article-service
+pdc-article-service/pdc-article-service-local
+pdc-cashbox-service/pdc-cashbox-service
+pdc-cashbox-service/pdc-cashbox-service-local
+pdc-db/pdc-db
+pdc-dealer-service/pdc-dealer-service
+pdc-dealer-service/pdc-dealer-service-local
+pdc-order-service/pdc-order-service
+pdc-order-service/pdc-order-service-local
