@@ -11,11 +11,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type AccountingResult struct {
-	Count_orders int
-	Total_amount float32
-}
-
 func GetAccountingHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -35,8 +30,8 @@ func GetAccountingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var accountingResult AccountingResult
-	db.Raw("SELECT count(orders.id) AS count_orders, sum(order_lines.price) AS total_amount FROM cashboxes, orders, order_lines WHERE cashboxes.id = orders.cashbox_id AND orders.id = order_lines.order_id AND orders.updated_at BETWEEN cashboxes.valid_from_date AND cashboxes.valid_to_date AND cashboxes.id = ?", vars["id"]).Scan(&accountingResult)
+	var accountingResult []model.CashboxAccounting
+	db.Raw("select to_char(orders.updated_at at time zone 'CET', 'DD.MM.YYYY HH24 Uhr') as order_date, count(DISTINCT orders.id) as count_orders, sum(order_lines.price) as total_amount from cashboxes, orders, order_lines where cashboxes.id = orders.cashbox_id and orders.id = order_lines.order_id and orders.updated_at between cashboxes.valid_from_date and cashboxes.valid_to_date and cashboxes.id = ? GROUP BY order_date, trunc(EXTRACT(hour from orders.updated_at) / 24)", vars["id"]).Scan(&accountingResult)
 
 	b, err := json.Marshal(accountingResult)
 
