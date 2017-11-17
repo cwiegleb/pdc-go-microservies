@@ -20,6 +20,7 @@ func main() {
 	db.AutoMigrate(&model.OrderLine{})
 	db.AutoMigrate(&model.Dealer{})
 	db.AutoMigrate(&model.Article{})
+	db.AutoMigrate(&model.DealerDetails{})
 
 	var unkwonDealer = &model.Dealer{
 		Text:       "Unbekannter Anbieter",
