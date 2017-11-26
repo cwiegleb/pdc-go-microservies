@@ -10,3 +10,5 @@ pdc-dealer-service/pdc-dealer-service
 pdc-dealer-service/pdc-dealer-service-local
 pdc-order-service/pdc-order-service
 pdc-order-service/pdc-order-service-local
+pdc-csv-upload-service/pdc-upload-csv-service-local
+pdc-csv-upload-service/pdc-upload-csv-service
