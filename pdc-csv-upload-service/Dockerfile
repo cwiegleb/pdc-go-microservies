@@ -1,4 +1,4 @@
 FROM scratch
-ADD pdc-dealer-service /
-EXPOSE 9003
+ADD pdc-csv-upload-service /
+EXPOSE 9005
 CMD ["/pdc-csv-upload-service"]
