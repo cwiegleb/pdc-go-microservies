@@ -8,7 +8,7 @@ import (
 type DealerDetails struct {
 	gorm.Model
 	DealerID   uint
-	Type       string
+ 	Type       string
 	Name       string
 	Street     string
 	City       string

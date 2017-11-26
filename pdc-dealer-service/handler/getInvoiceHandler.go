@@ -52,6 +52,7 @@ func GetInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("PDF Generator Error ", err)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/pdf")

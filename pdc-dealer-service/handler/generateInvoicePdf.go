@@ -26,7 +26,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 		return strconv.Itoa(t.Year())
 	}
 
-	titleStr := "Rechnung"
+	titleStr := "Auszahlung"
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetTitle(titleStr, false)
@@ -45,7 +45,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 	pdf.SetFont("Arial", "", 12)
 	pdf.CellFormat(0, 7, currentDateString(), "0", 1, "R", false, 0, "")
 	pdf.CellFormat(0, 7, strings.Join([]string{
-		tr("Rechnung: "), strings.Join([]string{
+		tr("Auszahlung: "), strings.Join([]string{
 			currentYearString(),
 			strconv.Itoa(int(dealerAccounting[0].DealerID))}, "_")}, " "), "0", 1, "R", false, 0, "")
 
@@ -105,19 +105,19 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Gebühr in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
@@ -154,7 +154,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		return strconv.Itoa(t.Year())
 	}
 
-	titleStr := "Rechnung"
+	titleStr := "Auszahlung"
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetTitle(titleStr, false)
@@ -173,7 +173,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 	pdf.SetFont("Arial", "", 12)
 	pdf.CellFormat(0, 7, currentDateString(), "0", 1, "R", false, 0, "")
 	pdf.CellFormat(0, 7, strings.Join([]string{
-		tr("Rechnung: "), strings.Join([]string{
+		tr("Auszahlung: "), strings.Join([]string{
 			currentYearString(),
 			strconv.Itoa(int(dealerAccounting[0].DealerID))}, "_")}, " "), "0", 1, "R", false, 0, "")
 
@@ -233,19 +233,19 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Gebühr in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")

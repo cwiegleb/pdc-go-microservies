@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 func GetHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +33,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 	w.Write(b)
 }

@@ -38,3 +38,10 @@ services:
       - 9004:9004
     links:
       - db:postgresContainer
+  
+  pdc-csv-upload-service:
+    image: cwiegleb/pdc-csv-upload-service
+    ports: 
+      - 9005:9005
+    links:
+      - db:postgresContainer

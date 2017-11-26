@@ -1,0 +1,2 @@
+ExternalId,Text,Name,Street,City,PostalCode,Telephone,Email,Iban,Bic,BankName,Fee,Commission,Currency
+4711,4711,Christian Wiegleb,Ahornstraße 10,Kreischa,01731,017630574022,cwiegleb@googlemail.com,3214211231221,GENODEF1,Sparda Bank,2.50,10,EUR
