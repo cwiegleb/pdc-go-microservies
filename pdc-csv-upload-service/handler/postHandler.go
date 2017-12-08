@@ -27,6 +27,10 @@ type dealerDetailsCSV struct {
 	Currency   string  `csv:"Currency"`
 }
 
+type errorMessage struct {
+	message string
+}
+
 type dealerArticleCSV struct {
 	Text     string  `csv:"Text"`
 	Size     string  `csv:"Size"`
@@ -104,7 +108,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		Name:       dealerDetailsUpload[0].Name,
 		Street:     dealerDetailsUpload[0].Street,
 		City:       dealerDetailsUpload[0].City,
-		PostalCode: dealerDetailsUpload[0].Telephone,
+		PostalCode: dealerDetailsUpload[0].PostalCode,
 		Telephone:  dealerDetailsUpload[0].Telephone,
 		Email:      dealerDetailsUpload[0].Email,
 		Iban:       dealerDetailsUpload[0].Iban,

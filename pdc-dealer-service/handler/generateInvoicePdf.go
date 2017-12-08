@@ -37,12 +37,12 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 	pdf.SetTopMargin(20)
 	pdf.AddPage()
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
-	pdf.SetFont("Arial", "B", 20)
+	pdf.SetFont("Helvetica", "B", 20)
 	wd := pdf.GetStringWidth(titleStr) + 6
 	pdf.CellFormat(wd, 14, titleStr, "0", 1, "L", false, 0, "")
 
 	pdf.Ln(20)
-	pdf.SetFont("Arial", "", 12)
+	pdf.SetFont("Helvetica", "", 12)
 	pdf.CellFormat(0, 7, currentDateString(), "0", 1, "R", false, 0, "")
 	pdf.CellFormat(0, 7, strings.Join([]string{
 		tr("Auszahlung: "), strings.Join([]string{
@@ -97,7 +97,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 			pdf.Ln(-1)
 		}
 
-		pdf.SetFont("Arial", "B", 12)
+		pdf.SetFont("Helvetica", "B", 12)
 		pdf.CellFormat(wSum, 0, "", "T", 1, "", false, 0, "")
 		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
@@ -129,7 +129,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.SetFont("Arial", "", 12)
+		pdf.SetFont("Helvetica", "", 12)
 
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")
@@ -165,12 +165,12 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 	pdf.SetTopMargin(20)
 	pdf.AddPage()
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
-	pdf.SetFont("Arial", "B", 20)
+	pdf.SetFont("Helvetica", "B", 20)
 	wd := pdf.GetStringWidth(titleStr) + 6
 	pdf.CellFormat(wd, 14, titleStr, "0", 1, "L", false, 0, "")
 
 	pdf.Ln(20)
-	pdf.SetFont("Arial", "", 12)
+	pdf.SetFont("Helvetica", "", 12)
 	pdf.CellFormat(0, 7, currentDateString(), "0", 1, "R", false, 0, "")
 	pdf.CellFormat(0, 7, strings.Join([]string{
 		tr("Auszahlung: "), strings.Join([]string{
@@ -225,7 +225,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 			pdf.Ln(-1)
 		}
 
-		pdf.SetFont("Arial", "B", 12)
+		pdf.SetFont("Helvetica", "B", 12)
 		pdf.CellFormat(wSum, 0, "", "T", 1, "", false, 0, "")
 		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
@@ -257,7 +257,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.SetFont("Arial", "", 12)
+		pdf.SetFont("Helvetica", "", 12)
 
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")
