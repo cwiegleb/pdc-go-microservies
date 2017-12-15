@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pdc-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.org/ssl-services: "hello-world-svc"
+spec:
+  # tls:
+  #   - hosts:
+  #     - pdc.local
+  #     secretName: tls-certificate
+  rules:
+  - host: pdc.local
+    http:
+      paths:
+      - path: /dealers/{id}/articles
+        backend:
+          serviceName: pdc-article-service
+          servicePort: 9001
+	    - path: /dealers/{id}/articles/{article-id}
+        backend:
+          serviceName: pdc-article-service
+          servicePort: 9001
+      - path: /cashboxes
+        backend:
+          serviceName: pdc-cashbox-service
+          servicePort: 9002
+    	- path: /cashboxes/{id}
+        backend:
+          serviceName: pdc-cashbox-service
+          servicePort: 9002
+      - path: /dealers-upload
+        backend:
+          serviceName: pdc-csv-upload-service
+          servicePort: 9005
+      - path: /dealers
+        backend:
+          serviceName: pdc-dealer-service
+          servicePort: 9003
+      - path: /dealers/{id}
+        backend:
+          serviceName: pdc-dealer-service
+          servicePort: 9003
+      - path: /dealers/{id}/invoice
+        backend:
+          serviceName: pdc-dealer-service
+          servicePort: 9003
+      - path: /dealers_invoices
+        backend:
+          serviceName: pdc-dealer-service
+          servicePort: 9003
+      - path: /cashboxes/{id}/orders
+        backend:
+            serviceName: pdc-order-service
+            servicePort: 9004
+      - path: /cashboxes/{id}/orders/{order-id}
+        backend:
+            serviceName: pdc-order-service
+            servicePort: 9004

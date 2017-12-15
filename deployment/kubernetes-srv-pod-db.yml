@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pdc-db-data
+  labels: 
+    type: pdc-db-data
+  namespace: pdc
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: slow
+  hostPath:
+    path: /data/pdc-db-data
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdc-db-data
+  labels:
+    type: pdc-db-data
+  namespace: pdc
+spec:
+  storageClassName: slow
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels: 
+      type: pdc-db-data
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-db
+  labels:
+    run: pdc-db
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-db
+    spec:
+      containers:
+      - name: pdc-db
+        image: postgres
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        env:
+          - 
+            name: POSTGRES_PASSWORD 
+            value: pdctest
+          - 
+            name: POSTGRES_USER
+            value: pdc
+          - 
+            name: POSTGRES_DB
+            value: pdcDB
+          - 
+            name: PGDATA
+            value: /pdc-db-data
+        volumeMounts:
+          - 
+            name: pdc-db-data
+            mountPath: /pdc-db-data
+      volumes:
+      - name: pdc-db-data
+        persistentVolumeClaim:
+          claimName: pdc-db-data
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pdc-db
+  namespace: pdc
+spec:
+  selector:
+    run: pdc-db
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: NodePort

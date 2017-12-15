@@ -1,0 +1,67 @@
+version: '3.1'
+
+services:
+  
+  pdc-db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: pdctest
+      POSTGRES_USER: pdc
+      POSTGRES_DB: pdcDB
+      PGDATA: db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  pdc-article-service:
+    image: cwiegleb/pdc-article-service
+    ports: 
+      - 9001:9001
+    links:
+      - pdc-db:postgresContainer
+    environment:
+      DB_DRIVER: postgres
+      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+  
+  pdc-cashbox-service:
+    image: cwiegleb/pdc-cashbox-service
+    ports: 
+      - 9002:9002
+    links:
+      - pdc-db:postgresContainer
+    environment:
+      DB_DRIVER: postgres
+      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+  pdc-dealer-service:
+    image: cwiegleb/pdc-dealer-service
+    ports: 
+      - 9003:9003
+    links:
+      - pdc-db:postgresContainer
+    environment:
+      DB_DRIVER: postgres
+      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+  pdc-order-service:
+    image: cwiegleb/pdc-order-service
+    ports: 
+      - 9004:9004
+    links:
+      - pdc-db:postgresContainer
+    environment:  
+      DB_DRIVER: postgres
+      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+  
+  pdc-csv-upload-service:
+    image: cwiegleb/pdc-csv-upload-service
+    ports: 
+      - 9005:9005
+    links:
+      - pdc-db:postgresContainer
+    environment:
+      DB_DRIVER: postgres
+      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+volumes:  
+  db-data:
+    driver: local

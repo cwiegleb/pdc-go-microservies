@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-order-service
+  labels:
+    run: pdc-order-service
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-order-service
+    spec:
+      containers:
+      - name: pdc-order-service
+        image: cwiegleb/pdc-order-service
+        ports:
+          - containerPort: 9004
+            protocol: TCP
+        env:
+          - 
+            name: DB_DRIVER 
+            value: postgres
+          - 
+            name: DB_CONNECTION
+            value: host=pdc-db.pdc.svc.cluster.local user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pdc-order-service
+  namespace: pdc
+spec:
+  selector:
+    run: pdc-order-service
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 9004
+      targetPort: 9004
+  type: NodePort

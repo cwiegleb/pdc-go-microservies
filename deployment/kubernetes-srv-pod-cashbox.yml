@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-cashbox-service
+  labels:
+    run: pdc-cashbox-service
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-cashbox-service
+    spec:
+      containers:
+      - name: pdc-cashbox-service
+        image: cwiegleb/pdc-cashbox-service
+        ports:
+          - containerPort: 9002
+            protocol: TCP
+        env:
+          - 
+            name: DB_DRIVER 
+            value: postgres
+          - 
+            name: DB_CONNECTION
+            value: host=pdc-db.pdc.svc.cluster.local user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pdc-cashbox-service
+  namespace: pdc
+spec:
+  selector:
+    run: pdc-cashbox-service
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 9002
+      targetPort: 9002
+  type: NodePort

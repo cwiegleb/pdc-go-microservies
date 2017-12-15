@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"gopkg.in/gcfg.v1"
 )
 
@@ -32,7 +34,8 @@ func LoadConfiguration(cfgFile string) Config {
 	if cfgFile != "" {
 		err = gcfg.ReadFileInto(&cfg, cfgFile)
 	} else {
-		err = gcfg.ReadStringInto(&cfg, defaultConfig)
+		cfg.Server.DbDriver = os.Getenv("DB_DRIVER")
+		cfg.Server.DbConnection = os.Getenv("DB_CONNECTION")
 	}
 
 	if err != nil {

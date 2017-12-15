@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-dealer-service
+  labels:
+    run: pdc-dealer-service
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-dealer-service
+    spec:
+      containers:
+      - name: pdc-dealer-service
+        image: cwiegleb/pdc-dealer-service
+        ports:
+          - containerPort: 9003
+            protocol: TCP
+        env:
+          - 
+            name: DB_DRIVER 
+            value: postgres
+          - 
+            name: DB_CONNECTION
+            value: host=pdc-db.pdc.svc.cluster.local user=pdc dbname=pdcDB sslmode=disable password=pdctest
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pdc-dealer-service
+  namespace: pdc
+spec:
+  selector:
+    run: pdc-dealer-service
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 9003
+      targetPort: 9003
+  type: NodePort
