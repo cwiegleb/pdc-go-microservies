@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-db-init
+  labels:
+    run: pdc-db-init
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-db-init
+    spec:
+      containers:
+      - name: pdc-db-init
+        image: cwiegleb/pdc-db
+        env:
+          - 
+            name: DB_DRIVER 
+            value: postgres
+          - 
+            name: DB_CONNECTION
+            value: host=pdc-db.pdc.svc.cluster.local user=pdc dbname=pdcDB sslmode=disable password=pdctest

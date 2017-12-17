@@ -17,7 +17,7 @@ func main() {
 	r.HandleFunc("/dealers/{id}", handler.DeleteHandler).Methods("DELETE")
 	r.HandleFunc("/dealers/{id}", handler.PutHandler).Methods("PUT")
 	r.HandleFunc("/dealers/{id}/invoice", handler.GetInvoiceHandler).Methods("GET")
-	r.HandleFunc("/dealers_invoices", handler.GetsInvoiceHandler).Methods("GET")
+	r.HandleFunc("/dealers-invoices", handler.GetsInvoiceHandler).Methods("GET")
 
 	allowedHeaders := handlers.AllowedHeaders([]string{"content-type"})
 	exposedHeaders := handlers.ExposedHeaders([]string{"Location"})

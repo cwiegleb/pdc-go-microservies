@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +52,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	location := []string{r.Host, "dealers", strconv.Itoa(int(dealerGet.ID)), "articles", strconv.Itoa(int(article.ID))}
+	location := []string{r.Host, "articles", strconv.Itoa(int(article.ID)), "dealers", strconv.Itoa(int(dealerGet.ID))}
 	w.Header().Set("Location", strings.Join(location, "/"))
 }

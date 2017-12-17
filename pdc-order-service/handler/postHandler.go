@@ -83,6 +83,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	tx.Commit()
 	defer tx.Close()
 
-	location := []string{r.Host, "cashboxes", strconv.Itoa(int(cashboxGet.ID)), "orders", strconv.Itoa(int(order.ID))}
+	location := []string{r.Host, "orders", strconv.Itoa(int(order.ID)), "cashboxes", strconv.Itoa(int(cashboxGet.ID))}
 	w.Header().Set("Location", strings.Join(location, "/"))
 }

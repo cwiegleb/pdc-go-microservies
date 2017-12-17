@@ -11,11 +11,11 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/cashboxes/{id}/orders", handler.PostHandler).Methods("POST")
-	r.HandleFunc("/cashboxes/{id}/orders", handler.GetsHandler).Methods("GET")
-	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.GetHandler).Methods("GET")
-	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.DeleteHandler).Methods("DELETE")
-	r.HandleFunc("/cashboxes/{id}/orders/{order-id}", handler.PutHandler).Methods("PUT")
+	r.HandleFunc("/orders/cashboxes/{id}", handler.PostHandler).Methods("POST")
+	r.HandleFunc("/orders/cashboxes/{id}", handler.GetsHandler).Methods("GET")
+	r.HandleFunc("/orders/{order-id}/cashboxes/{id}", handler.GetHandler).Methods("GET")
+	r.HandleFunc("/orders/{order-id}/cashboxes/{id}", handler.DeleteHandler).Methods("DELETE")
+	r.HandleFunc("/orders/{order-id}/cashboxes/{id}", handler.PutHandler).Methods("PUT")
 
 	allowedHeaders := handlers.AllowedHeaders([]string{"content-type"})
 	exposedHeaders := handlers.ExposedHeaders([]string{"Location"})
