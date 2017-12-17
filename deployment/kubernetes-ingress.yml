@@ -5,13 +5,14 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     # nginx.org/ssl-services: "hello-world-svc"
+  namespace: pdc
 spec:
   # tls:
   #   - hosts:
   #     - pdc.local
   #     secretName: tls-certificate
   rules:
-  - host: pdc.local
+  - host: pdc.service
     http:
       paths:
       - path: /articles
@@ -38,3 +39,10 @@ spec:
         backend:
             serviceName: pdc-order-service
             servicePort: 9004
+  - host: pdc.frontend
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pdc-frontend
+          servicePort: 80

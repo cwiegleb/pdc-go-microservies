@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdc-frontend
+  labels:
+    run: pdc-frontend
+  namespace: pdc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: pdc-frontend
+    spec:
+      containers:
+      - name: pdc-frontend
+        image: cwiegleb/pdc-frontend
+        ports:
+          - containerPort: 80
+            protocol: TCP
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: pdc-frontend
+  namespace: pdc
+spec:
+  selector:
+    run: pdc-frontend
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
