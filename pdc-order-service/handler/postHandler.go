@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
@@ -43,6 +44,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if strconv.Itoa(int(cashboxGet.ID)) != vars["id"] {
 		w.WriteHeader(http.StatusBadRequest)
 		log.Print("IDs mismatched")
+		return
+	}
+
+	if cashboxGet.ValidFromDate.Local().After(time.Now().Local()) || cashboxGet.ValidToDate.Local().Before(time.Now().Local()) {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Print("invalid order date")
 		return
 	}
 

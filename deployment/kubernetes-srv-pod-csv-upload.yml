@@ -4,13 +4,13 @@ metadata:
   name: pdc-csv-upload-service
   labels:
     run: pdc-csv-upload-service
+  namespace: pdc
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         run: pdc-csv-upload-service
-      namespace: pdc
     spec:
       containers:
       - name: pdc-csv-upload-service

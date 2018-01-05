@@ -29,8 +29,9 @@ func main() {
 	unkwonDealer.ID = 9999
 
 	var unkwonArticle = &model.Article{
-		Text:     "Unbekannter Anbieter",
-		DealerID: 9999,
+		Text:      "Unbekannter Anbieter",
+		DealerID:  9999,
+		Available: true,
 	}
 	unkwonArticle.ID = 9999
 

@@ -70,7 +70,7 @@ func GetsInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 		err = GenerateInvoicePdfBuffer(writer, item, dealerDetail)
 		writer.Flush()
 
-		if fw, err = zipWriter.Create("Rechnung_" + strconv.Itoa(int(item[0].DealerID)) + ".pdf"); err != nil {
+		if fw, err = zipWriter.Create("Auszahlung_" + strconv.Itoa(int(item[0].DealerID)) + ".pdf"); err != nil {
 			log.Fatal(err)
 		}
 		if _, err = fw.Write(pdfBytes.Bytes()); err != nil {

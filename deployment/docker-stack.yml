@@ -62,6 +62,11 @@ services:
       DB_DRIVER: postgres
       DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
 
+  pdc-frontend:
+    image: cwiegleb/pdc-frontend
+    ports: 
+      - 80:80
+
 volumes:  
   db-data:
     driver: local

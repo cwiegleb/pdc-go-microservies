@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: default-http-backend
+  namespace: pdc
 spec:
   replicas: 1
   template:
@@ -39,6 +40,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: default-http-backend
+  namespace: pdc
 spec:
   selector:
     app: default-http-backend
