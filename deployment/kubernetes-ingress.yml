@@ -15,10 +15,6 @@ spec:
   - host: service.pdc.local
     http:
       paths:
-      - path: /articles
-        backend:
-          serviceName: pdc-article-service
-          servicePort: 9001
       - path: /cashboxes
         backend:
           serviceName: pdc-cashbox-service

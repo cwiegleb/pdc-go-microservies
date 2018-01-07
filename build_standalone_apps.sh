@@ -1,9 +1,5 @@
 #!/bin/bash
 
-pushd pdc-article-service
- CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pdc-article-service 
-popd
-
 pushd pdc-cashbox-service
  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pdc-cashbox-service
 popd

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-pushd pdc-article-service
- docker build -t cwiegleb/pdc-article-service:latest .
-popd
-
 pushd pdc-cashbox-service
  docker build -t cwiegleb/pdc-cashbox-service:latest .
 popd
