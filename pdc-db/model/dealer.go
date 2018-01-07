@@ -9,5 +9,4 @@ type Dealer struct {
 	gorm.Model
 	Text       string
 	ExternalId string
-	Articles   []Article
 }

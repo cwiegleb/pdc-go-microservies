@@ -63,6 +63,14 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < len(order.OrderLines); i++ {
+
+		var dealerWhere model.Dealer
+		if db.Where(order.OrderLines[i].DealerID).First(&dealerWhere).Error != nil {
+			tx.Rollback()
+			w.WriteHeader(http.StatusNotFound)
+			log.Printf("Dealer Entry %s not found", strconv.Itoa(int(order.OrderLines[i].DealerID)))
+			return
+		}
 		order.OrderLines[i].OrderID = order.ID
 		tx.NewRecord(order.OrderLines[i])
 	}

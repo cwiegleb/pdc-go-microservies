@@ -40,7 +40,7 @@ func GetInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var accountingResult []model.DealerAccounting
-	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and dealers.id = ? ", vars["id"]).Scan(&accountingResult)
+	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and order_lines.dealer_id = dealers.id and dealers.id = ? ", vars["id"]).Scan(&accountingResult)
 
 	if len(accountingResult) == 0 {
 		w.WriteHeader(http.StatusNoContent)

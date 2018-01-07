@@ -19,7 +19,6 @@ func main() {
 	db.AutoMigrate(&model.Order{})
 	db.AutoMigrate(&model.OrderLine{})
 	db.AutoMigrate(&model.Dealer{})
-	db.AutoMigrate(&model.Article{})
 	db.AutoMigrate(&model.DealerDetails{})
 
 	var unkwonDealer = &model.Dealer{
@@ -27,17 +26,6 @@ func main() {
 		ExternalId: "Unbekannter Anbieter",
 	}
 	unkwonDealer.ID = 9999
-
-	var unkwonArticle = &model.Article{
-		Text:      "Unbekannter Anbieter",
-		DealerID:  9999,
-		Available: true,
-	}
-	unkwonArticle.ID = 9999
-
-	if db.Create(unkwonArticle).Error != nil {
-		println(db.Create(unkwonArticle).Error)
-	}
 
 	if db.Create(unkwonDealer).Error != nil {
 		println(db.Create(unkwonDealer).Error)
