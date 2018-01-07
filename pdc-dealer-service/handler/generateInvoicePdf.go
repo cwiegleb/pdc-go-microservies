@@ -57,7 +57,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 
 	pdf.Ln(10)
 
-	header := []string{"Position", "Artikel", "Bezeichnung", "Summe der Position"}
+	header := []string{"Position", "Artikel", "Summe der Position"}
 
 	partAmount := func() float32 {
 		var amount float32
@@ -77,7 +77,7 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 
 	improvedTable := func() {
 		// Column widths
-		w := []float64{30.0, 30, 70.0, 45.0}
+		w := []float64{30.0, 100.0, 45.0}
 		wSum := 0.0
 		for _, v := range w {
 			wSum += v
@@ -92,42 +92,41 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 		for j, item := range dealerAccounting {
 			pdf.CellFormat(w[0], 7, strconv.Itoa(int(j)+1), "LR", 0, "C", false, 0, "")
 			pdf.CellFormat(w[1], 7, strconv.Itoa(int(item.ArticleID)), "LR", 0, "C", false, 0, "")
-			pdf.CellFormat(w[2], 7, tr(item.ArticleText), "LR", 0, "", false, 0, "")
-			pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(item.Price)), "LR", 0, "C", false, 0, "")
+			pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(item.Price)), "LR", 0, "C", false, 0, "")
 			pdf.Ln(-1)
 		}
 
 		pdf.SetFont("Helvetica", "B", 12)
 		pdf.CellFormat(wSum, 0, "", "T", 1, "", false, 0, "")
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Auszahlung in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(toalAmount())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Auszahlung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(toalAmount())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
 		pdf.SetFont("Helvetica", "", 12)
 
@@ -185,7 +184,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 
 	pdf.Ln(10)
 
-	header := []string{"Position", "Artikel", "Bezeichnung", "Summe der Position"}
+	header := []string{"Position", "Artikel", "Summe der Position"}
 
 	partAmount := func() float32 {
 		var amount float32
@@ -205,7 +204,7 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 
 	improvedTable := func() {
 		// Column widths
-		w := []float64{30.0, 30, 70.0, 45.0}
+		w := []float64{30.0, 100.0, 45.0}
 		wSum := 0.0
 		for _, v := range w {
 			wSum += v
@@ -220,42 +219,41 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		for j, item := range dealerAccounting {
 			pdf.CellFormat(w[0], 7, strconv.Itoa(int(j)+1), "LR", 0, "C", false, 0, "")
 			pdf.CellFormat(w[1], 7, strconv.Itoa(int(item.ArticleID)), "LR", 0, "C", false, 0, "")
-			pdf.CellFormat(w[2], 7, tr(item.ArticleText), "LR", 0, "", false, 0, "")
-			pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(item.Price)), "LR", 0, "C", false, 0, "")
+			pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(item.Price)), "LR", 0, "C", false, 0, "")
 			pdf.Ln(-1)
 		}
 
 		pdf.SetFont("Helvetica", "B", 12)
 		pdf.CellFormat(wSum, 0, "", "T", 1, "", false, 0, "")
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Zwischensumme in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmount())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1]+w[2], 7, tr("Auszahlung in € "), "", 0, "R", false, 0, "")
-		pdf.CellFormat(w[3], 7, humanize.FormatFloat("###,##", float64(toalAmount())), "LR", 0, "C", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Auszahlung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(toalAmount())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
-		pdf.CellFormat(w[0]+w[1]+w[2], 0, "", "", 0, "", false, 0, "")
-		pdf.CellFormat(w[3], 0, "", "T", 1, "", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
+		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
 		pdf.SetFont("Helvetica", "", 12)
 

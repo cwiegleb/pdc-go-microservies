@@ -63,26 +63,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < len(order.OrderLines); i++ {
-		var article model.Article
-
-		if order.OrderLines[i].ArticleID != 0 {
-
-			if db.Where("id = ? AND available = true", order.OrderLines[i].ArticleID).First(&article).Error != nil {
-				tx.Rollback()
-				w.WriteHeader(http.StatusBadRequest)
-				log.Print("article already sold")
-				return
-			}
-
-			var articleUpdate model.Article
-			if order.OrderLines[i].ArticleID != 9999 && tx.Model(&articleUpdate).Where("id = ? AND available = true", order.OrderLines[i].ArticleID).Update("available", false).Error != nil {
-				tx.Rollback()
-				w.WriteHeader(http.StatusBadRequest)
-				log.Print("failed to update article")
-				return
-			}
-		}
-
 		order.OrderLines[i].OrderID = order.ID
 		tx.NewRecord(order.OrderLines[i])
 	}

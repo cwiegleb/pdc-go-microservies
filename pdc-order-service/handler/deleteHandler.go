@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
+	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 func DeleteHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,20 +46,6 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < len(oldOrderLines); i++ {
-		var article model.Article
-		if db.Where("id = ? AND available = 0", oldOrderLines[i].ArticleID).First(&article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("cannot find old article")
-			return
-		}
-		article.Available = true
-		if tx.Save(&article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("failed to update old article")
-			return
-		}
 
 		if tx.Delete(&model.OrderLine{}, oldOrderLines[i].ID).Error != nil {
 			tx.Rollback()

@@ -31,13 +31,6 @@ type errorMessage struct {
 	message string
 }
 
-type dealerArticleCSV struct {
-	Text     string  `csv:"Text"`
-	Size     string  `csv:"Size"`
-	Costs    float64 `csv:"Costs"`
-	Currency string  `csv:"Currency"`
-}
-
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	multipartFileDealer, _, err := r.FormFile("dealerDetails.csv")
@@ -48,14 +41,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer multipartFileDealer.Close()
-
-	multipartFileDealerArticles, _, err := r.FormFile("dealerArticles.csv")
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Print("failed to connect database", err)
-		return
-	}
-	defer multipartFileDealerArticles.Close()
 
 	config := config.LoadConfiguration("")
 	db, err := gorm.Open(config.DbDriver, config.DbConnection)
@@ -74,71 +59,74 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dealerArticlesUpload := []*dealerArticleCSV{}
-	if err := gocsv.Unmarshal(multipartFileDealerArticles, &dealerArticlesUpload); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Print(err)
-		return
-	}
-
-	dealer := &model.Dealer{
-		Text:       dealerDetailsUpload[0].ExternalId,
-		ExternalId: dealerDetailsUpload[0].ExternalId,
-	}
-
 	tx := db.Begin()
 	defer tx.Close()
 
-	var dealerWhere model.Dealer
-	if db.Where("external_id = ?", dealer.ExternalId).First(&dealerWhere).Error == nil {
-		tx.Rollback()
-		w.WriteHeader(http.StatusBadRequest)
-		log.Print("external id already exists")
-		return
-	}
+	for _, item := range dealerDetailsUpload {
 
-	if tx.Create(dealer).Error != nil {
-		tx.Rollback()
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		log.Print("failed to create dealer")
-	}
-
-	dealerDetails := &model.DealerDetails{
-		DealerID:   dealer.ID,
-		Name:       dealerDetailsUpload[0].Name,
-		Street:     dealerDetailsUpload[0].Street,
-		City:       dealerDetailsUpload[0].City,
-		PostalCode: dealerDetailsUpload[0].PostalCode,
-		Telephone:  dealerDetailsUpload[0].Telephone,
-		Email:      dealerDetailsUpload[0].Email,
-		Iban:       dealerDetailsUpload[0].Iban,
-		Bic:        dealerDetailsUpload[0].Bic,
-		BankName:   dealerDetailsUpload[0].BankName,
-		Fee:        dealerDetailsUpload[0].Fee,
-		Commission: dealerDetailsUpload[0].Commission,
-		Currency:   dealerDetailsUpload[0].Currency,
-	}
-
-	if tx.Create(dealerDetails).Error != nil {
-		tx.Rollback()
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		log.Print("failed to create dealer details")
-	}
-
-	for _, item := range dealerArticlesUpload {
-		article := &model.Article{
-			Text:      item.Text,
-			Size:      item.Size,
-			DealerID:  dealer.ID,
-			Available: true,
-			Costs:     item.Costs,
-			Currency:  item.Currency,
+		dealer := &model.Dealer{
+			Text:       item.ExternalId,
+			ExternalId: item.ExternalId,
 		}
 
-		if tx.Create(article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusUnprocessableEntity)
-			log.Print("failed to create article")
+		var dealerWhere model.Dealer
+		if db.Where("external_id = ?", dealer.ExternalId).First(&dealerWhere).Error == nil {
+
+			var dealerDetailsWhere model.DealerDetails
+			if db.Where("dealer_id = ?", dealerWhere.ID).First(&dealerDetailsWhere).Error == nil {
+
+				dealerDetailsWhere.DealerID = dealerWhere.ID
+				dealerDetailsWhere.Name = item.Name
+				dealerDetailsWhere.Street = item.Street
+				dealerDetailsWhere.City = item.City
+				dealerDetailsWhere.PostalCode = item.PostalCode
+				dealerDetailsWhere.Telephone = item.Telephone
+				dealerDetailsWhere.Email = item.Email
+				dealerDetailsWhere.Iban = item.Iban
+				dealerDetailsWhere.Bic = item.Bic
+				dealerDetailsWhere.BankName = item.BankName
+				dealerDetailsWhere.Fee = item.Fee
+				dealerDetailsWhere.Commission = item.Commission
+				dealerDetailsWhere.Currency = item.Currency
+
+				if tx.Save(dealerDetailsWhere).Error != nil {
+					tx.Rollback()
+					w.WriteHeader(http.StatusUnprocessableEntity)
+					log.Print("failed to update dealer with id", dealerWhere.ID)
+					return
+				}
+			}
+
+		} else {
+			if tx.Create(dealer).Error != nil {
+				tx.Rollback()
+				w.WriteHeader(http.StatusUnprocessableEntity)
+				log.Print("failed to create dealer")
+				return
+			}
+
+			dealerDetails := &model.DealerDetails{
+				DealerID:   dealer.ID,
+				Name:       item.Name,
+				Street:     item.Street,
+				City:       item.City,
+				PostalCode: item.PostalCode,
+				Telephone:  item.Telephone,
+				Email:      item.Email,
+				Iban:       item.Iban,
+				Bic:        item.Bic,
+				BankName:   item.BankName,
+				Fee:        item.Fee,
+				Commission: item.Commission,
+				Currency:   item.Currency,
+			}
+
+			if tx.Create(dealerDetails).Error != nil {
+				tx.Rollback()
+				w.WriteHeader(http.StatusUnprocessableEntity)
+				log.Print("failed to create dealer details for id ", dealerDetails.DealerID)
+				return
+			}
 		}
 	}
 	tx.Commit()

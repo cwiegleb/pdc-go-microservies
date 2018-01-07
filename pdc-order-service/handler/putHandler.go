@@ -71,20 +71,6 @@ func PutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < len(oldOrderLines); i++ {
-		var article model.Article
-		if db.Where("id = ? AND available = 0", oldOrderLines[i].ArticleID).First(&article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("cannot find old article")
-			return
-		}
-		article.Available = true
-		if tx.Save(&article).Error != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			log.Print("failed to update old article")
-			return
-		}
 
 		if tx.Delete(&model.OrderLine{}, oldOrderLines[i].ID).Error != nil {
 			tx.Rollback()
@@ -95,25 +81,6 @@ func PutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i := 0; i < len(order.OrderLines); i++ {
-		var article model.Article
-
-		if order.OrderLines[i].ArticleID != 0 {
-			if db.Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).First(&article).Error != nil {
-				tx.Rollback()
-				w.WriteHeader(http.StatusBadRequest)
-				log.Print("article already sold")
-				return
-			}
-
-			var articleUpdate1 model.Article
-			if tx.Model(&articleUpdate1).Where("id = ? AND available = 1", order.OrderLines[i].ArticleID).Update("available", 0).Error != nil {
-				tx.Rollback()
-				w.WriteHeader(http.StatusBadRequest)
-				log.Print("failed to update article")
-				return
-			}
-		}
-
 		tx.NewRecord(order.OrderLines[i])
 	}
 
