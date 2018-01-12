@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pdc-order-service
-        image: cwiegleb/pdc-order-service
+        image: cwiegleb/pdc-order-service:no-article
         ports:
           - containerPort: 9004
             protocol: TCP

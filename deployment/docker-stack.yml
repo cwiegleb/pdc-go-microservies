@@ -12,18 +12,8 @@ services:
     ports:
       - 5432:5432
 
-  pdc-article-service:
-    image: cwiegleb/pdc-article-service
-    ports: 
-      - 9001:9001
-    links:
-      - pdc-db:postgresContainer
-    environment:
-      DB_DRIVER: postgres
-      DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
-  
   pdc-cashbox-service:
-    image: cwiegleb/pdc-cashbox-service
+    image: cwiegleb/pdc-cashbox-service:no-article
     ports: 
       - 9002:9002
     links:
@@ -33,7 +23,7 @@ services:
       DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
 
   pdc-dealer-service:
-    image: cwiegleb/pdc-dealer-service
+    image: cwiegleb/pdc-dealer-service:no-article
     ports: 
       - 9003:9003
     links:
@@ -43,7 +33,7 @@ services:
       DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
 
   pdc-order-service:
-    image: cwiegleb/pdc-order-service
+    image: cwiegleb/pdc-order-service:no-article
     ports: 
       - 9004:9004
     links:
@@ -53,7 +43,7 @@ services:
       DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
   
   pdc-csv-upload-service:
-    image: cwiegleb/pdc-csv-upload-service
+    image: cwiegleb/pdc-csv-upload-service:no-article
     ports: 
       - 9005:9005
     links:
@@ -63,7 +53,7 @@ services:
       DB_CONNECTION: host=postgresContainer user=pdc dbname=pdcDB sslmode=disable password=pdctest
 
   pdc-frontend:
-    image: cwiegleb/pdc-frontend
+    image: cwiegleb/pdc-frontend:no-article
     ports: 
       - 80:80
 

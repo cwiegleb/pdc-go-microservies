@@ -1,23 +1,23 @@
 #!/bin/bash
 
 pushd pdc-cashbox-service
- docker build -t cwiegleb/pdc-cashbox-service:latest .
+ docker build -t cwiegleb/pdc-cashbox-service:no-article .
 popd
 
 pushd pdc-dealer-service
- docker build -t cwiegleb/pdc-dealer-service:latest .
+ docker build -t cwiegleb/pdc-dealer-service:no-article .
 popd
 
 pushd pdc-order-service
- docker build -t cwiegleb/pdc-order-service:latest .
+ docker build -t cwiegleb/pdc-order-service:no-article .
 popd 
 
 pushd pdc-csv-upload-service
- docker build -t cwiegleb/pdc-csv-upload-service:latest .
+ docker build -t cwiegleb/pdc-csv-upload-service:no-article .
 popd 
 
 pushd pdc-db
- docker build -t cwiegleb/pdc-db:latest .
+ docker build -t cwiegleb/pdc-db:no-article .
 popd
 
 

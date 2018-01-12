@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pdc-db-init
-        image: cwiegleb/pdc-db
+        image: cwiegleb/pdc-db:no-article
         env:
           - 
             name: DB_DRIVER 
