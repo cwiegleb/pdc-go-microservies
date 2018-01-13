@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pdc-csv-upload-service
-        image: cwiegleb/pdc-csv-upload-service
+        image: cwiegleb/pdc-csv-upload-service:no-article
         ports:
           - containerPort: 9005
             protocol: TCP

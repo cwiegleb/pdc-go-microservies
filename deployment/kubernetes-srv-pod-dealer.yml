@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pdc-dealer-service
-        image: cwiegleb/pdc-dealer-service
+        image: cwiegleb/pdc-dealer-service:no-article
         ports:
           - containerPort: 9003
             protocol: TCP

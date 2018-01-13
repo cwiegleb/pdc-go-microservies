@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pdc-cashbox-service
-        image: cwiegleb/pdc-cashbox-service
+        image: cwiegleb/pdc-cashbox-service:no-article
         ports:
           - containerPort: 9002
             protocol: TCP
