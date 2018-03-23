@@ -7,7 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
+	"strings"
 
 	"github.com/cwiegleb/pdc-services/pdc-db/config"
 	"github.com/cwiegleb/pdc-services/pdc-db/model"
@@ -37,7 +37,7 @@ func GetsInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var accountingResult []model.DealerAccounting
-	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and order_lines.dealer_id = dealers.id").Scan(&accountingResult)
+	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, dealers.external_id as external_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and order_lines.dealer_id = dealers.id").Scan(&accountingResult)
 	if len(accountingResult) == 0 {
 		w.WriteHeader(http.StatusNoContent)
 		log.Printf("No PDFs to create")
@@ -69,7 +69,7 @@ func GetsInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 		err = GenerateInvoicePdfBuffer(writer, item, dealerDetail)
 		writer.Flush()
 
-		if fw, err = zipWriter.Create("Auszahlung_" + strconv.Itoa(int(item[0].DealerID)) + ".pdf"); err != nil {
+		if fw, err = zipWriter.Create(strings.Join([]string{"Auszahlung_", item[0].ExternalID, ".pdf"}, "")); err != nil {
 			log.Fatal(err)
 		}
 		if _, err = fw.Write(pdfBytes.Bytes()); err != nil {

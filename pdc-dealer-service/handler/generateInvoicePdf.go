@@ -130,12 +130,19 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 
 		pdf.SetFont("Helvetica", "", 12)
 
+		if len(dealerDetails.Iban) != 0 {
+			pdf.Ln(20)
+			pdf.CellFormat(0, 7, tr("Das Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
+			pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
+		}
+
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")
 		pdf.CellFormat(0, 7, tr("Kinderkleiderbörse Kreischa"), "0", 1, "L", false, 0, "")
 	}
 
 	improvedTable()
+
 	return pdf.Output(writer)
 }
 
@@ -256,6 +263,12 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
 		pdf.SetFont("Helvetica", "", 12)
+
+		if len(dealerDetails.Iban) != 0 {
+			pdf.Ln(20)
+			pdf.CellFormat(0, 7, tr("Das Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
+			pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
+		}
 
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")

@@ -11,7 +11,8 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/dealers-upload", handler.PostHandler).Methods("POST")
+	r.HandleFunc("/dealers-upload", handler.PostHandlerDealer).Methods("POST")
+	r.HandleFunc("/cashbox-upload", handler.PostHandlerCashbox).Methods("POST")
 
 	allowedHeaders := handlers.AllowedHeaders([]string{"content-type"})
 	allowedMethods := handlers.AllowedMethods([]string{"POST", "HEAD"})
