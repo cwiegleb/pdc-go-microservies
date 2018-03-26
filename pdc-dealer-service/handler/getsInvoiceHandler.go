@@ -37,7 +37,7 @@ func GetsInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var accountingResult []model.DealerAccounting
-	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, dealers.external_id as external_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and order_lines.dealer_id = dealers.id").Scan(&accountingResult)
+	db.Raw("select dealers.id as dealer_id, order_lines.article_id as article_id, dealers.external_id as external_id, order_lines.price as price from dealers, orders, order_lines where orders.id = order_lines.order_id and order_lines.dealer_id = dealers.id order by article_id").Scan(&accountingResult)
 	if len(accountingResult) == 0 {
 		w.WriteHeader(http.StatusNoContent)
 		log.Printf("No PDFs to create")

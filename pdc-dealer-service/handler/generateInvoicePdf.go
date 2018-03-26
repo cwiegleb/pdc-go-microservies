@@ -47,13 +47,18 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 	pdf.CellFormat(0, 7, strings.Join([]string{
 		tr("Auszahlung: "), strings.Join([]string{
 			currentYearString(),
-			strconv.Itoa(int(dealerAccounting[0].DealerID))}, "_")}, " "), "0", 1, "R", false, 0, "")
+			strconv.Itoa(int(time.Now().Month())),
+			dealerAccounting[0].ExternalID}, "_")}, " "), "0", 1, "R", false, 0, "")
 
 	pdf.Ln(10)
 	pdf.CellFormat(0, 7, tr("An"), "0", 1, "L", false, 0, "")
 	pdf.CellFormat(0, 7, tr(dealerDetails.Name), "0", 1, "L", false, 0, "")
-	pdf.CellFormat(0, 7, tr(dealerDetails.Street), "0", 1, "L", false, 0, "")
-	pdf.CellFormat(0, 7, strings.Join([]string{tr(dealerDetails.PostalCode), tr(dealerDetails.City)}, " "), "0", 1, "L", false, 0, "")
+	if len(dealerDetails.Street) != 0 && len(dealerDetails.City) != 0 {
+		pdf.CellFormat(0, 7, tr(dealerDetails.Street), "0", 1, "L", false, 0, "")
+		pdf.CellFormat(0, 7, strings.Join([]string{tr(dealerDetails.PostalCode), tr(dealerDetails.City)}, " "), "0", 1, "L", false, 0, "")
+	}
+	pdf.Ln(10)
+	pdf.CellFormat(0, 7, strings.Join([]string{"Anbieternummer", tr(dealerAccounting[0].ExternalID)}, " "), "0", 1, "L", false, 0, "")
 
 	pdf.Ln(10)
 
@@ -104,19 +109,19 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Unterstützung Förderverein in % "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Unterstützung Förderverein in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwicklung in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
@@ -130,11 +135,11 @@ func GenerateInvoicePdfHttp(writer http.ResponseWriter, dealerAccounting []model
 
 		pdf.SetFont("Helvetica", "", 12)
 
-		if len(dealerDetails.Iban) != 0 {
-			pdf.Ln(20)
-			pdf.CellFormat(0, 7, tr("Das Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
-			pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
-		}
+		// if len(dealerDetails.Iban) != 0 {
+		// 	pdf.Ln(20)
+		// 	pdf.CellFormat(0, 7, tr("Die Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
+		// 	pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
+		// }
 
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")
@@ -181,13 +186,18 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 	pdf.CellFormat(0, 7, strings.Join([]string{
 		tr("Auszahlung: "), strings.Join([]string{
 			currentYearString(),
-			strconv.Itoa(int(dealerAccounting[0].DealerID))}, "_")}, " "), "0", 1, "R", false, 0, "")
+			strconv.Itoa(int(time.Now().Month())),
+			dealerAccounting[0].ExternalID}, "_")}, " "), "0", 1, "R", false, 0, "")
 
 	pdf.Ln(10)
 	pdf.CellFormat(0, 7, tr("An"), "0", 1, "L", false, 0, "")
 	pdf.CellFormat(0, 7, tr(dealerDetails.Name), "0", 1, "L", false, 0, "")
-	pdf.CellFormat(0, 7, tr(dealerDetails.Street), "0", 1, "L", false, 0, "")
-	pdf.CellFormat(0, 7, strings.Join([]string{tr(dealerDetails.PostalCode), tr(dealerDetails.City)}, " "), "0", 1, "L", false, 0, "")
+	if len(dealerDetails.Street) != 0 && len(dealerDetails.City) != 0 {
+		pdf.CellFormat(0, 7, tr(dealerDetails.Street), "0", 1, "L", false, 0, "")
+		pdf.CellFormat(0, 7, strings.Join([]string{tr(dealerDetails.PostalCode), tr(dealerDetails.City)}, " "), "0", 1, "L", false, 0, "")
+	}
+	pdf.Ln(10)
+	pdf.CellFormat(0, 7, strings.Join([]string{"Anbieternummer", tr(dealerAccounting[0].ExternalID)}, " "), "0", 1, "L", false, 0, "")
 
 	pdf.Ln(10)
 
@@ -238,19 +248,19 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in % "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Unterstützung Förderverein in % "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Commission)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Provision für Kindergarten in Kreischa in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Unterstützung Förderverein in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(partAmountCommission())), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
 		pdf.CellFormat(w[2], 0, "", "T", 1, "", false, 0, "")
 
-		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwickung in € "), "", 0, "R", false, 0, "")
+		pdf.CellFormat(w[0]+w[1], 7, tr("Abzüglich Pauschale für Abwicklung in € "), "", 0, "R", false, 0, "")
 		pdf.CellFormat(w[2], 7, humanize.FormatFloat("###,##", float64(dealerDetails.Fee)), "LR", 0, "C", false, 0, "")
 		pdf.Ln(-1)
 		pdf.CellFormat(w[0]+w[1], 0, "", "", 0, "", false, 0, "")
@@ -264,11 +274,11 @@ func GenerateInvoicePdfBuffer(writer *bufio.Writer, dealerAccounting []model.Dea
 
 		pdf.SetFont("Helvetica", "", 12)
 
-		if len(dealerDetails.Iban) != 0 {
-			pdf.Ln(20)
-			pdf.CellFormat(0, 7, tr("Das Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
-			pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
-		}
+		// if len(dealerDetails.Iban) != 0 {
+		// 	pdf.Ln(20)
+		// 	pdf.CellFormat(0, 7, tr("Die Auszahlung erfolgt auf folgendes Konto:"), "0", 1, "L", false, 0, "")
+		// 	pdf.CellFormat(0, 7, strings.Join([]string{dealerDetails.Iban, dealerDetails.Bic}, " "), "0", 1, "L", false, 0, "")
+		// }
 
 		pdf.Ln(20)
 		pdf.CellFormat(0, 7, tr("Mit freundlichen Grüßen"), "0", 1, "L", false, 0, "")

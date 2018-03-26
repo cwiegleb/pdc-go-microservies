@@ -73,10 +73,10 @@ func PostHandlerCashbox(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var dealerDetailsWhere model.DealerDetails
-		if db.Where("dealer_id = ?", dealerWhere.ID).First(&dealerDetailsWhere).Error == nil {
+		if db.Where("dealer_id = ?", dealerWhere.ID).First(&dealerDetailsWhere).Error != nil {
 			tx.Rollback()
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			log.Print("failed to determine dealer details for id", dealerDetailsWhere.ID)
+			log.Print("failed to determine dealer details for id ", dealerWhere.ID)
 			return
 		}
 
