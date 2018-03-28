@@ -18,10 +18,11 @@ func main() {
 	r.HandleFunc("/dealers/{id}", handler.PutHandler).Methods("PUT")
 	r.HandleFunc("/dealers/{id}/invoice", handler.GetInvoiceHandler).Methods("GET")
 	r.HandleFunc("/dealers-invoices", handler.GetsInvoiceHandler).Methods("GET")
+	r.HandleFunc("/dealers-transfer", handler.GetsHibiscusTransferHandler).Methods("GET")
 
 	allowedHeaders := handlers.AllowedHeaders([]string{"content-type"})
 	exposedHeaders := handlers.ExposedHeaders([]string{"Location"})
 	allowedMethods := handlers.AllowedMethods([]string{"PUT", "POST", "GET", "HEAD"})
 
-	http.ListenAndServe(":9003", handlers.CORS(allowedHeaders, exposedHeaders, allowedMethods)(r))
+	http.ListenAndServe(":9006", handlers.CORS(allowedHeaders, exposedHeaders, allowedMethods)(r))
 }

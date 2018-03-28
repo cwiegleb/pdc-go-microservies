@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects>
+ {{with .}}
+  {{range .}}
+  <object type="de.willuhn.jameica.hbci.server.AuslandsUeberweisungImpl" id="1">
+    <empfaenger_bic type="java.lang.String">{{ .Bic }}</empfaenger_bic>
+    <purposecode type="java.lang.String"></purposecode>
+    <ausgefuehrt type="java.lang.Integer">0</ausgefuehrt>
+    <empfaenger_konto type="java.lang.String">{{ .Iban }}</empfaenger_konto>
+    <betrag type="java.lang.Double">{{ .Amount }}</betrag>
+    <termin type="java.sql.Date">28.03.2018 00:00:00</termin>
+    <konto_id type="java.lang.Integer">1</konto_id>
+    <empfaenger_name type="java.lang.String">{{ .Name }}</empfaenger_name>
+    <endtoendid type="java.lang.String"></endtoendid>
+    <pmtinfid type="java.lang.String"></pmtinfid>
+    <zweck type="java.lang.String">KKB Kreischa 03/18 - Anbieternummer {{ .ExternalID }}</zweck>
+  </object>
+  {{end}}
+  {{end}}
+</objects>
